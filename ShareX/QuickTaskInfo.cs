@@ -47,6 +47,7 @@ namespace ShareX
         {
             new QuickTaskInfo("Save, Upload, Copy URL", AfterCaptureTasks.SaveImageToFileWithDialog | AfterCaptureTasks.UploadImageToHost, AfterUploadTasks.CopyURLToClipboard),
             new QuickTaskInfo("Save, Copy image", AfterCaptureTasks.SaveImageToFileWithDialog | AfterCaptureTasks.CopyImageToClipboard),
+            new QuickTaskInfo("Upload", AfterCaptureTasks.UploadImageToHost),
             new QuickTaskInfo("Upload, Copy URL", AfterCaptureTasks.UploadImageToHost, AfterUploadTasks.CopyURLToClipboard),
             new QuickTaskInfo("Save", AfterCaptureTasks.SaveImageToFileWithDialog),
             new QuickTaskInfo("Copy image", AfterCaptureTasks.CopyImageToClipboard),

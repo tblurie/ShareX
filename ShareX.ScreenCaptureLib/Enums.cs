@@ -286,6 +286,7 @@ namespace ShareX.ScreenCaptureLib
         DrawingImageScreen,
         DrawingSticker,
         DrawingCursor,
+        DrawingSmartEraser,
         EffectBlur,
         EffectPixelate,
         EffectHighlight,
@@ -315,15 +316,6 @@ namespace ShareX.ScreenCaptureLib
         Maximized,
         PreviousState,
         Fullscreen
-    }
-
-    public enum ImageEditorInterpolationMode // Localized
-    {
-        HighQualityBicubic,
-        Bicubic,
-        HighQualityBilinear,
-        Bilinear,
-        NearestNeighbor
     }
 
     public enum ImageInsertMethod

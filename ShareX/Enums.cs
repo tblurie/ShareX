@@ -59,12 +59,16 @@ namespace ShareX
         Indonesian,
         [Description("Italiano (Italian)")]
         Italian,
+        [Description("日本語 (Japanese)")]
+        Japanese,
         [Description("한국어 (Korean)")]
         Korean,
         [Description("Español mexicano (Mexican Spanish)")]
         MexicanSpanish,
         [Description("فارسی (Persian)")]
         Persian,
+        [Description("Português (Portuguese)")]
+        Portuguese,
         [Description("Português-Brasil (Portuguese-Brazil)")]
         PortugueseBrazil,
         [Description("Русский (Russian)")]
@@ -208,9 +212,13 @@ namespace ShareX
         HashCheck,
         DNSChanger,
         QRCode,
+        QRCodeDecodeFromScreen,
         Ruler,
         IndexFolder,
         ImageCombiner,
+        ImageSplitter,
+        ImageThumbnailer,
+        VideoConverter,
         VideoThumbnailer,
         TweetMessage,
         MonitorTest,

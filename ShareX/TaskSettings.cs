@@ -45,6 +45,9 @@ namespace ShareX
         [JsonIgnore]
         public TaskSettings TaskSettingsReference { get; private set; }
 
+        [JsonIgnore]
+        public bool IsSafeTaskSettings => TaskSettingsReference != null;
+
         public string Description = "";
 
         public HotkeyType Job = HotkeyType.None;
@@ -69,6 +72,20 @@ namespace ShareX
 
         public bool OverrideCustomUploader = false;
         public int CustomUploaderIndex = 0;
+
+        public bool OverrideScreenshotsFolder = false;
+        public string ScreenshotsFolder = "";
+
+        public string GetScreenshotsFolder()
+        {
+            if (OverrideScreenshotsFolder && !string.IsNullOrEmpty(ScreenshotsFolder))
+            {
+                string screenshotsFolderPath = NameParser.Parse(NameParserType.FolderPath, ScreenshotsFolder);
+                return Helpers.GetAbsolutePath(screenshotsFolderPath);
+            }
+
+            return Program.ScreenshotsFolder;
+        }
 
         public bool UseDefaultGeneralSettings = true;
         public TaskSettingsGeneral GeneralSettings = new TaskSettingsGeneral();
@@ -148,20 +165,6 @@ namespace ShareX
                 return UseDefaultAfterCaptureJob && UseDefaultAfterUploadJob && UseDefaultDestinations && !OverrideFTP && !OverrideCustomUploader && UseDefaultGeneralSettings &&
                     UseDefaultImageSettings && UseDefaultCaptureSettings && UseDefaultUploadSettings && UseDefaultActions && UseDefaultToolsSettings &&
                     UseDefaultAdvancedSettings && !WatchFolderEnabled;
-            }
-        }
-
-        public string CaptureFolder
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(AdvancedSettings.CapturePath))
-                {
-                    string captureFolderPath = NameParser.Parse(NameParserType.FolderPath, AdvancedSettings.CapturePath);
-                    return Helpers.GetAbsolutePath(captureFolderPath);
-                }
-
-                return Program.ScreenshotsFolder;
             }
         }
 
@@ -349,6 +352,7 @@ namespace ShareX
         public float ScreenRecordDuration = 3f;
         public bool ScreenRecordTwoPassEncoding = false;
         public bool ScreenRecordAskConfirmationOnAbort = false;
+        public bool ScreenRecordTransparentRegion = false;
 
         #endregion Capture / Screen recorder
 
@@ -376,6 +380,9 @@ namespace ShareX
         public bool RegionCaptureUseWindowPattern = true;
         public bool FileUploadUseNamePattern = false;
         public bool FileUploadReplaceProblematicCharacters = false;
+        public bool URLRegexReplace = false;
+        public string URLRegexReplacePattern = "^https?://(.+)$";
+        public string URLRegexReplaceReplacement = "https://$1";
 
         #endregion Upload / File naming
 
@@ -398,6 +405,8 @@ namespace ShareX
     public class TaskSettingsTools
     {
         public string ScreenColorPickerFormat = "$hex";
+        public string ScreenColorPickerFormatCtrl = "$r255, $g255, $b255";
+        public string ScreenColorPickerInfoText = "RGB: $r255, $g255, $b255$nHex: $hex$nX: $x Y: $y";
         public IndexerSettings IndexerSettings = new IndexerSettings();
         public ImageCombinerOptions ImageCombinerOptions = new ImageCombinerOptions();
         public VideoConverterOptions VideoConverterOptions = new VideoConverterOptions();
@@ -428,9 +437,6 @@ namespace ShareX
         Editor(typeof(WavFileNameEditor), typeof(UITypeEditor))]
         public string CustomCaptureSoundPath { get; set; }
 
-        [Category("Sound"), DefaultValue(""), Description("If this text is not empty then when the screen is captured text to speech engine will say the phrase entered instead of playing the default sound.")]
-        public string SpeechCapture { get; set; }
-
         [Category("Sound"), DefaultValue(false), Description("Enable/disable custom task complete sound.")]
         public bool UseCustomTaskCompletedSound { get; set; }
 
@@ -438,19 +444,12 @@ namespace ShareX
         Editor(typeof(WavFileNameEditor), typeof(UITypeEditor))]
         public string CustomTaskCompletedSoundPath { get; set; }
 
-        [Category("Sound"), DefaultValue(""), Description("If this text is not empty then when a task is completed text to speech engine will say the phrase entered instead of playing the default sound.")]
-        public string SpeechTaskCompleted { get; set; }
-
         [Category("Sound"), DefaultValue(false), Description("Enable/disable custom error sound.")]
         public bool UseCustomErrorSound { get; set; }
 
         [Category("Sound"), DefaultValue(""), Description("Error sound file path."),
         Editor(typeof(WavFileNameEditor), typeof(UITypeEditor))]
         public string CustomErrorSoundPath { get; set; }
-
-        [Category("Paths"), Description("Custom capture path takes precedence over path configured in Application configuration."),
-        Editor(typeof(DirectoryNameEditor), typeof(UITypeEditor))]
-        public string CapturePath { get; set; }
 
         [Category("Capture"), DefaultValue(true), Description("Disable annotation support in region capture.")]
         public bool RegionCaptureDisableAnnotation { get; set; }
@@ -521,15 +520,6 @@ namespace ShareX
         [Category("Notifications"), DefaultValue(ContentAlignment.BottomRight), Description("Specify where should toast notification window appear on the screen.")]
         public ContentAlignment ToastWindowPlacement { get; set; }
 
-        [Category("Notifications"), DefaultValue(ToastClickAction.OpenUrl), Description("Specify action after toast notification window is left clicked."), TypeConverter(typeof(EnumDescriptionConverter))]
-        public ToastClickAction ToastWindowClickAction { get; set; }
-
-        [Category("Notifications"), DefaultValue(ToastClickAction.CloseNotification), Description("Specify action after toast notification window is right clicked."), TypeConverter(typeof(EnumDescriptionConverter))]
-        public ToastClickAction ToastWindowRightClickAction { get; set; }
-
-        [Category("Notifications"), DefaultValue(ToastClickAction.AnnotateImage), Description("Specify action after toast notification window is middle clicked."), TypeConverter(typeof(EnumDescriptionConverter))]
-        public ToastClickAction ToastWindowMiddleClickAction { get; set; }
-
         private Size toastWindowSize;
 
         [Category("Notifications"), DefaultValue(typeof(Size), "400, 300"), Description("Maximum toast notification window size.")]
@@ -544,6 +534,15 @@ namespace ShareX
                 toastWindowSize = new Size(Math.Max(value.Width, 100), Math.Max(value.Height, 100));
             }
         }
+
+        [Category("Notifications"), DefaultValue(ToastClickAction.OpenUrl), Description("Specify action after toast notification window is left clicked."), TypeConverter(typeof(EnumDescriptionConverter))]
+        public ToastClickAction ToastWindowClickAction { get; set; }
+
+        [Category("Notifications"), DefaultValue(ToastClickAction.CloseNotification), Description("Specify action after toast notification window is right clicked."), TypeConverter(typeof(EnumDescriptionConverter))]
+        public ToastClickAction ToastWindowRightClickAction { get; set; }
+
+        [Category("Notifications"), DefaultValue(ToastClickAction.AnnotateImage), Description("Specify action after toast notification window is middle clicked."), TypeConverter(typeof(EnumDescriptionConverter))]
+        public ToastClickAction ToastWindowMiddleClickAction { get; set; }
 
         [Category("After upload"), DefaultValue(false), Description("After upload form will be automatically closed after 60 seconds.")]
         public bool AutoCloseAfterUploadForm { get; set; }
@@ -566,6 +565,9 @@ namespace ShareX
 
         [Category("Name pattern"), DefaultValue(50), Description("Maximum name pattern title (%t) length for file name.")]
         public int NamePatternMaxTitleLength { get; set; }
+
+        // TEMP: For backward compatibility
+        public string CapturePath;
 
         public TaskSettingsAdvanced()
         {

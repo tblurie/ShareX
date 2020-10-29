@@ -272,7 +272,7 @@ namespace ShareX.HelpersLib
                     tsmiRedo.Enabled = !rtb.ReadOnly && rtb.CanRedo;
                     tsmiCut.Enabled = !rtb.ReadOnly && rtb.SelectionLength > 0;
                     tsmiCopy.Enabled = rtb.SelectionLength > 0;
-                    tsmiPaste.Enabled = !rtb.ReadOnly && Clipboard.ContainsText();
+                    tsmiPaste.Enabled = !rtb.ReadOnly && ClipboardHelpers.ContainsText();
                     tsmiDelete.Enabled = !rtb.ReadOnly && rtb.SelectionLength > 0;
                     tsmiSelectAll.Enabled = rtb.TextLength > 0 && rtb.SelectionLength < rtb.TextLength;
                 };
@@ -566,7 +566,13 @@ namespace ShareX.HelpersLib
 
         public static void DisableMenuCloseOnClick(this ToolStripDropDownItem tsddi)
         {
-            tsddi.DropDown.Closing += (sender, e) => e.Cancel = e.CloseReason == ToolStripDropDownCloseReason.ItemClicked;
+            tsddi.DropDown.Closing -= DisableMenuCloseOnClick_DropDown_Closing;
+            tsddi.DropDown.Closing += DisableMenuCloseOnClick_DropDown_Closing;
+        }
+
+        private static void DisableMenuCloseOnClick_DropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            e.Cancel = e.CloseReason == ToolStripDropDownCloseReason.ItemClicked;
         }
 
         public static void SetValue(this NumericUpDown nud, decimal number)
@@ -648,6 +654,16 @@ namespace ShareX.HelpersLib
         public static Point Center(this Rectangle rect)
         {
             return new Point(rect.X + (rect.Width / 2), rect.Y + (rect.Height / 2));
+        }
+
+        public static int Area(this Rectangle rect)
+        {
+            return rect.Width * rect.Height;
+        }
+
+        public static int Perimeter(this Rectangle rect)
+        {
+            return 2 * (rect.Width + rect.Height);
         }
 
         public static Point Restrict(this Point point, Rectangle rect)
@@ -794,13 +810,13 @@ namespace ShareX.HelpersLib
             return Range(source, startIndex, endIndex);
         }
 
-        public static Image CloneSafe(this Image img)
+        public static T CloneSafe<T>(this T obj) where T : class, ICloneable
         {
             try
             {
-                if (img != null)
+                if (obj != null)
                 {
-                    return (Image)img.Clone();
+                    return obj.Clone() as T;
                 }
             }
             catch (Exception e)
@@ -822,6 +838,11 @@ namespace ShareX.HelpersLib
                     yield return child;
                 }
             }
+        }
+
+        public static bool IsTransparent(this Color color)
+        {
+            return color.A < 255;
         }
     }
 }

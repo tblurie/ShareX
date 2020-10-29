@@ -35,7 +35,7 @@ namespace ShareX.ScreenCaptureLib
     public partial class EditorStartupForm : Form
     {
         public RegionCaptureOptions Options { get; private set; }
-        public Image Image { get; private set; }
+        public Bitmap Image { get; private set; }
         public string ImageFilePath { get; private set; }
 
         public EditorStartupForm(RegionCaptureOptions options)
@@ -69,7 +69,7 @@ namespace ShareX.ScreenCaptureLib
 
         private void btnLoadImageFromClipboard_Click(object sender, EventArgs e)
         {
-            if (Clipboard.ContainsImage())
+            if (ClipboardHelpers.ContainsImage())
             {
                 Image = ClipboardHelpers.GetImage();
 
@@ -79,7 +79,7 @@ namespace ShareX.ScreenCaptureLib
                     Close();
                 }
             }
-            else if (Clipboard.ContainsFileDropList())
+            else if (ClipboardHelpers.ContainsFileDropList())
             {
                 string[] files = ClipboardHelpers.GetFileDropList();
 

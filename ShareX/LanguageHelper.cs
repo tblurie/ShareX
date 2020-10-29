@@ -98,6 +98,9 @@ namespace ShareX
                 case SupportedLanguage.Italian:
                     icon = Resources.it;
                     break;
+                case SupportedLanguage.Japanese:
+                    icon = Resources.jp;
+                    break;
                 case SupportedLanguage.Korean:
                     icon = Resources.kr;
                     break;
@@ -106,6 +109,9 @@ namespace ShareX
                     break;
                 case SupportedLanguage.Persian:
                     icon = Resources.ir;
+                    break;
+                case SupportedLanguage.Portuguese:
+                    icon = Resources.pt;
                     break;
                 case SupportedLanguage.PortugueseBrazil:
                     icon = Resources.br;
@@ -164,6 +170,9 @@ namespace ShareX
                 case SupportedLanguage.Italian:
                     cultureName = "it-IT";
                     break;
+                case SupportedLanguage.Japanese:
+                    cultureName = "ja-JP";
+                    break;
                 case SupportedLanguage.Korean:
                     cultureName = "ko-KR";
                     break;
@@ -172,6 +181,9 @@ namespace ShareX
                     break;
                 case SupportedLanguage.Persian:
                     cultureName = "fa-IR";
+                    break;
+                case SupportedLanguage.Portuguese:
+                    cultureName = "pt-PT";
                     break;
                 case SupportedLanguage.PortugueseBrazil:
                     cultureName = "pt-BR";

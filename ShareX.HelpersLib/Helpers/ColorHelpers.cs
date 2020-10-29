@@ -336,7 +336,7 @@ namespace ShareX.HelpersLib
 
         public static Color RandomColor()
         {
-            return Color.FromArgb(MathHelpers.Random(255), MathHelpers.Random(255), MathHelpers.Random(255));
+            return Color.FromArgb(RandomFast.Next(255), RandomFast.Next(255), RandomFast.Next(255));
         }
 
         public static bool ParseColor(string text, out Color color)
@@ -455,6 +455,12 @@ namespace ShareX.HelpersLib
         {
             List<Color> colors = GetKnownColors();
             return colors.Aggregate(Color.Black, (accu, curr) => ColorDifference(color, curr) < ColorDifference(color, accu) ? curr : accu);
+        }
+
+        public static string GetColorName(Color color)
+        {
+            Color knownColor = FindClosestKnownColor(color);
+            return Helpers.GetProperName(knownColor.Name);
         }
     }
 }

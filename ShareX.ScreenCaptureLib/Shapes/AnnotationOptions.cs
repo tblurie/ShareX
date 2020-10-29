@@ -23,6 +23,7 @@
 
 #endregion License Information (GPL v3)
 
+using ShareX.HelpersLib;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -51,7 +52,7 @@ namespace ShareX.ScreenCaptureLib
         public int LineCenterPointCount { get; set; } = 1;
 
         // Arrow drawing
-        public bool ArrowHeadsBothSide { get; set; } = false;
+        public ArrowHeadDirection ArrowHeadDirection { get; set; } = ArrowHeadDirection.End;
 
         // Text (Outline) drawing
         public TextDrawingOptions TextOutlineOptions { get; set; } = new TextDrawingOptions()
@@ -74,7 +75,7 @@ namespace ShareX.ScreenCaptureLib
         public Color TextFillColor { get; set; } = PrimaryColor;
 
         // Image drawing
-        public ImageEditorInterpolationMode ImageInterpolationMode = ImageEditorInterpolationMode.NearestNeighbor;
+        public ImageInterpolationMode ImageInterpolationMode = ImageInterpolationMode.NearestNeighbor;
         public string LastImageFilePath { get; set; }
 
         // Step drawing

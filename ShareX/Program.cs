@@ -98,7 +98,7 @@ namespace ShareX
         internal static HotkeyManager HotkeyManager { get; set; }
         internal static WatchFolderManager WatchFolderManager { get; set; }
         internal static GitHubUpdateManager UpdateManager { get; private set; }
-        internal static CLIManager CLI { get; private set; }
+        internal static ShareXCLIManager CLI { get; private set; }
 
         #region Paths
 
@@ -232,6 +232,7 @@ namespace ShareX
         }
 
         public static string ToolsFolder => Path.Combine(PersonalFolder, "Tools");
+        public static string ImageEffectsFolder => Path.Combine(PersonalFolder, "ImageEffects");
         public static string ScreenRecorderCacheFilePath => Path.Combine(PersonalFolder, "ScreenRecorder.avi");
         public static string DefaultFFmpegFilePath => Path.Combine(ToolsFolder, "ffmpeg.exe");
         public static string ChromeHostManifestFilePath => Path.Combine(ToolsFolder, "Chrome-host-manifest.json");
@@ -241,7 +242,7 @@ namespace ShareX
 
         #endregion Paths
 
-        private static bool closeSequenceStarted, restarting;
+        private static bool closeSequenceStarted, restartRequested, restartAsAdmin;
 
         [STAThread]
         private static void Main(string[] args)
@@ -260,7 +261,7 @@ namespace ShareX
 
             StartTimer = Stopwatch.StartNew(); // For be able to show startup time
 
-            CLI = new CLIManager(args);
+            CLI = new ShareXCLIManager(args);
             CLI.ParseCommands();
 
 #if STEAM
@@ -280,10 +281,18 @@ namespace ShareX
                 Run();
             }
 
-            if (restarting)
+            if (restartRequested)
             {
                 DebugHelper.WriteLine("ShareX restarting.");
-                Process.Start(Application.ExecutablePath);
+
+                if (restartAsAdmin)
+                {
+                    TaskHelpers.RunShareXAsAdmin("-silent");
+                }
+                else
+                {
+                    Process.Start(Application.ExecutablePath);
+                }
             }
         }
 
@@ -315,6 +324,8 @@ namespace ShareX
 
             IgnoreHotkeyWarning = CLI.IsCommandExist("NoHotkeys");
 
+            CreateParentFolders();
+            RegisterExtensions();
             CheckPuushMode();
             DebugWriteFlags();
             CleanTempFiles();
@@ -323,10 +334,9 @@ namespace ShareX
 
             Uploader.UpdateServicePointManager();
             UpdateManager = new GitHubUpdateManager("ShareX", "ShareX", Dev, Portable);
-
             LanguageHelper.ChangeLanguage(Settings.Language);
-
             Helpers.TryFixHandCursor();
+
             DebugHelper.WriteLine("MainForm init started.");
             MainForm = new MainForm();
             DebugHelper.WriteLine("MainForm init finished.");
@@ -352,9 +362,10 @@ namespace ShareX
             }
         }
 
-        public static void Restart()
+        public static void Restart(bool asAdmin = false)
         {
-            restarting = true;
+            restartRequested = true;
+            restartAsAdmin = asAdmin;
             Application.Exit();
         }
 
@@ -382,7 +393,8 @@ namespace ShareX
 
                     CLIManager cli = new CLIManager(args.CommandLineArgs);
                     cli.ParseCommands();
-                    MainForm.UseCommandLineArgs(cli.Commands);
+
+                    CLI.UseCommandLineArgs(cli.Commands);
                 };
 
                 MainForm.InvokeSafe(d);
@@ -468,6 +480,43 @@ namespace ShareX
                     }
                 }
             }
+        }
+
+        private static void CreateParentFolders()
+        {
+            if (!Sandbox && Directory.Exists(PersonalFolder))
+            {
+                Helpers.CreateDirectory(SettingManager.BackupFolder);
+                Helpers.CreateDirectory(ImageEffectsFolder);
+                Helpers.CreateDirectory(LogsFolder);
+                Helpers.CreateDirectory(ScreenshotsParentFolder);
+                Helpers.CreateDirectory(ToolsFolder);
+            }
+        }
+
+        private static void RegisterExtensions()
+        {
+#if !WindowsStore
+            if (!Portable)
+            {
+                if (!IntegrationHelpers.CheckCustomUploaderExtension())
+                {
+                    IntegrationHelpers.CreateCustomUploaderExtension(true);
+                }
+
+                if (!IntegrationHelpers.CheckImageEffectExtension())
+                {
+                    IntegrationHelpers.CreateImageEffectExtension(true);
+                }
+            }
+#endif
+        }
+
+        public static void UpdateHelpersSpecialFolders()
+        {
+            Dictionary<string, string> specialFolders = new Dictionary<string, string>();
+            specialFolders.Add("ShareXImageEffects", ImageEffectsFolder);
+            HelpersOptions.ShareXSpecialFolders = specialFolders;
         }
 
         private static void MigratePersonalPathConfig()
