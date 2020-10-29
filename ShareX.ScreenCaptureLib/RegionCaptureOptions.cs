@@ -60,10 +60,10 @@ namespace ShareX.ScreenCaptureLib
             new SnapSize(1280, 720), // 720p
             new SnapSize(1920, 1080) // 1080p
         };
-        public bool ShowInfo = true;
-        public bool ShowMagnifier = true;
+        public bool ShowInfo = false;
+        public bool ShowMagnifier = false;
         public bool UseSquareMagnifier = false;
-        public int MagnifierPixelCount = 15; // Must be odd number like 11, 13, 15 etc.
+        public int MagnifierPixelCount = 3; // Must be odd number like 11, 13, 15 etc.
         public int MagnifierPixelSize = 10;
         public bool ShowCrosshair = false;
         public bool UseLightResizeNodes = false;

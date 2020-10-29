@@ -50,10 +50,10 @@ namespace ShareX
         public HotkeyType Job = HotkeyType.None;
 
         public bool UseDefaultAfterCaptureJob = true;
-        public AfterCaptureTasks AfterCaptureJob = AfterCaptureTasks.CopyImageToClipboard | AfterCaptureTasks.SaveImageToFile | AfterCaptureTasks.UploadImageToHost;
+        public AfterCaptureTasks AfterCaptureJob = AfterCaptureTasks.ShowQuickTaskMenu;
 
         public bool UseDefaultAfterUploadJob = true;
-        public AfterUploadTasks AfterUploadJob = AfterUploadTasks.CopyURLToClipboard;
+        public AfterUploadTasks AfterUploadJob = AfterUploadTasks.None;
 
         public bool UseDefaultDestinations = true;
         public ImageDestination ImageDestination = ImageDestination.Imgur;
@@ -320,7 +320,7 @@ namespace ShareX
     {
         #region Capture / General
 
-        public bool ShowCursor = true;
+        public bool ShowCursor = false;
         public decimal ScreenshotDelay = 0;
         public bool CaptureTransparent = false;
         public bool CaptureShadow = true;
@@ -452,7 +452,7 @@ namespace ShareX
         Editor(typeof(DirectoryNameEditor), typeof(UITypeEditor))]
         public string CapturePath { get; set; }
 
-        [Category("Capture"), DefaultValue(false), Description("Disable annotation support in region capture.")]
+        [Category("Capture"), DefaultValue(true), Description("Disable annotation support in region capture.")]
         public bool RegionCaptureDisableAnnotation { get; set; }
 
         [Category("Upload"), Description("Files with these file extensions will be uploaded using image uploader."),
