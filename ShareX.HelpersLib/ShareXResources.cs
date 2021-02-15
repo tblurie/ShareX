@@ -65,7 +65,7 @@ namespace ShareX.HelpersLib
 
         public static Bitmap Logo => Resources.ShareX_Logo;
 
-        public static ShareXTheme Theme { get; set; } = new ShareXTheme();
+        public static ShareXTheme Theme { get; set; } = ShareXTheme.DarkTheme;
 
         public static void ApplyTheme(Form form, bool setIcon = true)
         {
@@ -191,6 +191,14 @@ namespace ShareX.HelpersLib
             foreach (Control child in control.Controls)
             {
                 ApplyCustomThemeToControl(child);
+            }
+
+            switch (control)
+            {
+                case TabToTreeView tttv:
+                    tttv.LeftPanelBackColor = Theme.DarkBackgroundColor;
+                    tttv.SeparatorColor = Theme.SeparatorDarkColor;
+                    break;
             }
         }
 

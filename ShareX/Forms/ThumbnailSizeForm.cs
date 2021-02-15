@@ -23,41 +23,47 @@
 
 #endregion License Information (GPL v3)
 
-using CG.Web.MegaApiClient;
 using ShareX.HelpersLib;
 using System;
+using System.Drawing;
+using System.Windows.Forms;
 
-namespace ShareX.UploadersLib
+namespace ShareX
 {
-    public class MegaAuthInfos
+    public partial class ThumbnailSizeForm : Form
     {
-        public string Email { get; set; }
-        [JsonEncrypt]
-        public string Hash { get; set; }
-        [JsonEncrypt]
-        public string PasswordAesKey { get; set; }
+        public Size ThumbnailSize { get; set; }
 
-        public MegaAuthInfos()
+        public ThumbnailSizeForm()
         {
+            InitializeComponent();
+            ShareXResources.ApplyTheme(this);
         }
 
-        public MegaAuthInfos(MegaApiClient.AuthInfos authInfos)
+        public ThumbnailSizeForm(Size thumbnailSize) : this()
         {
-            Email = authInfos.Email;
-            Hash = authInfos.Hash;
-            PasswordAesKey = Convert.ToBase64String(authInfos.PasswordAesKey);
+            ThumbnailSize = thumbnailSize;
+            nudWidth.SetValue(ThumbnailSize.Width);
+            nudHeight.SetValue(ThumbnailSize.Height);
         }
 
-        public MegaApiClient.AuthInfos GetMegaApiClientAuthInfos()
+        private void btnReset_Click(object sender, EventArgs e)
         {
-            byte[] passwordAesKey = null;
+            nudWidth.SetValue(200);
+            nudHeight.SetValue(150);
+        }
 
-            if (!string.IsNullOrEmpty(PasswordAesKey))
-            {
-                passwordAesKey = Convert.FromBase64String(PasswordAesKey);
-            }
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            ThumbnailSize = new Size((int)nudWidth.Value, (int)nudHeight.Value);
+            DialogResult = DialogResult.OK;
+            Close();
+        }
 
-            return new MegaApiClient.AuthInfos(Email, Hash, passwordAesKey);
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

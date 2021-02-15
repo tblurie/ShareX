@@ -819,7 +819,7 @@ namespace ShareX
         {
             if (Program.Settings.Themes == null || Program.Settings.Themes.Count == 0)
             {
-                Program.Settings.Themes = ShareXTheme.GetPresets();
+                Program.Settings.Themes = ShareXTheme.GetDefaultThemes();
                 Program.Settings.SelectedTheme = 0;
             }
 
@@ -1163,8 +1163,9 @@ namespace ShareX
 
             ucTaskThumbnailView.TitleVisible = Program.Settings.ShowThumbnailTitle;
             ucTaskThumbnailView.TitleLocation = Program.Settings.ThumbnailTitleLocation;
+            ucTaskThumbnailView.ThumbnailSize = Program.Settings.ThumbnailSize;
 
-            tsmiThumbnailTitle.Visible = Program.Settings.TaskViewMode == TaskViewMode.ThumbnailView;
+            tsmiThumbnailTitle.Visible = tsmiThumbnailSize.Visible = Program.Settings.TaskViewMode == TaskViewMode.ThumbnailView;
 
             Refresh();
         }
@@ -2522,6 +2523,18 @@ namespace ShareX
             Program.Settings.ThumbnailTitleLocation = ThumbnailTitleLocation.Bottom;
             tsmiThumbnailTitleBottom.Check();
             UpdateMainWindowLayout();
+        }
+
+        private void tsmiThumbnailSize_Click(object sender, EventArgs e)
+        {
+            using (ThumbnailSizeForm form = new ThumbnailSizeForm(Program.Settings.ThumbnailSize))
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    Program.Settings.ThumbnailSize = form.ThumbnailSize;
+                    UpdateMainWindowLayout();
+                }
+            }
         }
 
         private void TsmiSwitchTaskViewMode_Click(object sender, EventArgs e)

@@ -628,6 +628,8 @@ namespace ShareX.UploadersLib
             this.tcUploaders = new System.Windows.Forms.TabControl();
             this.tttvMain = new ShareX.HelpersLib.TabToTreeView();
             this.actRapidShareAccountType = new ShareX.UploadersLib.AccountTypeControl();
+            this.lblGfycatTitle = new System.Windows.Forms.Label();
+            this.txtGfycatTitle = new System.Windows.Forms.TextBox();
             this.tpOtherUploaders.SuspendLayout();
             this.tcOtherUploaders.SuspendLayout();
             this.tpTwitter.SuspendLayout();
@@ -2478,6 +2480,8 @@ namespace ShareX.UploadersLib
             // tpGfycat
             // 
             this.tpGfycat.BackColor = System.Drawing.SystemColors.Window;
+            this.tpGfycat.Controls.Add(this.txtGfycatTitle);
+            this.tpGfycat.Controls.Add(this.lblGfycatTitle);
             this.tpGfycat.Controls.Add(this.cbGfycatKeepAudio);
             this.tpGfycat.Controls.Add(this.cbGfycatIsPublic);
             this.tpGfycat.Controls.Add(this.atcGfycatAccountType);
@@ -4925,16 +4929,29 @@ namespace ShareX.UploadersLib
             this.tttvMain.AutoSelectChild = true;
             resources.ApplyResources(this.tttvMain, "tttvMain");
             this.tttvMain.ImageList = null;
+            this.tttvMain.LeftPanelBackColor = System.Drawing.SystemColors.Window;
             this.tttvMain.MainTabControl = null;
             this.tttvMain.Name = "tttvMain";
+            this.tttvMain.SeparatorColor = System.Drawing.SystemColors.ControlDark;
             this.tttvMain.TreeViewFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.tttvMain.TreeViewSize = 210;
+            this.tttvMain.TreeViewSize = 230;
             // 
             // actRapidShareAccountType
             // 
             resources.ApplyResources(this.actRapidShareAccountType, "actRapidShareAccountType");
             this.actRapidShareAccountType.Name = "actRapidShareAccountType";
             this.actRapidShareAccountType.SelectedAccountType = ShareX.UploadersLib.AccountType.Anonymous;
+            // 
+            // lblGfycatTitle
+            // 
+            resources.ApplyResources(this.lblGfycatTitle, "lblGfycatTitle");
+            this.lblGfycatTitle.Name = "lblGfycatTitle";
+            // 
+            // txtGfycatTitle
+            // 
+            resources.ApplyResources(this.txtGfycatTitle, "txtGfycatTitle");
+            this.txtGfycatTitle.Name = "txtGfycatTitle";
+            this.txtGfycatTitle.TextChanged += new System.EventHandler(this.txtGfycatTitle_TextChanged);
             // 
             // UploadersConfigForm
             // 
@@ -5674,5 +5691,7 @@ namespace ShareX.UploadersLib
         private System.Windows.Forms.ComboBox cbGoogleDriveSharedDrive;
         private System.Windows.Forms.TextBox txtKuttDomain;
         private System.Windows.Forms.Label lblKuttDomain;
+        private System.Windows.Forms.TextBox txtGfycatTitle;
+        private System.Windows.Forms.Label lblGfycatTitle;
     }
 }

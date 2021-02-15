@@ -55,6 +55,7 @@ namespace ShareX
         public bool ShowColumns = true;
         public bool ShowThumbnailTitle = true;
         public ThumbnailTitleLocation ThumbnailTitleLocation = ThumbnailTitleLocation.Top;
+        public Size ThumbnailSize = new Size(200, 150);
         public ImagePreviewVisibility ImagePreview = ImagePreviewVisibility.Automatic;
         public ImagePreviewLocation ImagePreviewLocation = ImagePreviewLocation.Side;
         public int PreviewSplitterDistance = 335;
@@ -93,7 +94,7 @@ namespace ShareX
         public bool UseDarkTheme = true;
 
         public bool UseCustomTheme = true;
-        public List<ShareXTheme> Themes = ShareXTheme.GetPresets();
+        public List<ShareXTheme> Themes = ShareXTheme.GetDefaultThemes();
         public int SelectedTheme = 0;
 
         #endregion
