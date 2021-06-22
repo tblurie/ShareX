@@ -485,7 +485,7 @@ namespace ShareX
         {
             if (!Sandbox && Directory.Exists(PersonalFolder))
             {
-                Helpers.CreateDirectory(SettingManager.BackupFolder);
+                //Helpers.CreateDirectory(SettingManager.BackupFolder);
                 Helpers.CreateDirectory(ImageEffectsFolder);
                 Helpers.CreateDirectory(LogsFolder);
                 Helpers.CreateDirectory(ScreenshotsParentFolder);

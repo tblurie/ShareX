@@ -549,7 +549,7 @@ namespace ShareX
                 {
                     BackupFolder = SettingManager.BackupFolder,
                     CreateBackup = false,
-                    CreateWeeklyBackup = true
+                    CreateWeeklyBackup = false
                 };
 
                 history.AppendHistoryItem(historyItem);
