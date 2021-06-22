@@ -981,6 +981,7 @@ namespace ShareX
             HelpersOptions.URLEncodeIgnoreEmoji = Program.Settings.URLEncodeIgnoreEmoji;
             HelpersOptions.DefaultCopyImageFillBackground = Program.Settings.DefaultClipboardCopyImageFillBackground;
             HelpersOptions.UseAlternativeClipboardCopyImage = Program.Settings.UseAlternativeClipboardCopyImage;
+            HelpersOptions.UseAlternativeClipboardGetImage = Program.Settings.UseAlternativeClipboardGetImage;
             HelpersOptions.RotateImageByExifOrientationData = Program.Settings.RotateImageByExifOrientationData;
             HelpersOptions.BrowserPath = Program.Settings.BrowserPath;
             HelpersOptions.RecentColors = Program.Settings.RecentColors;
@@ -1853,6 +1854,11 @@ namespace ShareX
         private void tsmiVideoThumbnailer_Click(object sender, EventArgs e)
         {
             TaskHelpers.OpenVideoThumbnailer();
+        }
+
+        private void tsmiInspectWindow_Click(object sender, EventArgs e)
+        {
+            TaskHelpers.OpenInspectWindow();
         }
 
         private void tsmiClipboardViewer_Click(object sender, EventArgs e)

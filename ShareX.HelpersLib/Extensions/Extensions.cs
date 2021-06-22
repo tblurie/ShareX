@@ -680,6 +680,21 @@ namespace ShareX.HelpersLib
             typeof(ComboBox).InvokeMember("RefreshItems", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod, null, cb, new object[] { });
         }
 
+        public static void AutoSizeDropDown(this ComboBox cb)
+        {
+            int maxWidth = 0;
+            int verticalScrollBarWidth = cb.Items.Count > cb.MaxDropDownItems ? SystemInformation.VerticalScrollBarWidth : 0;
+            foreach (object item in cb.Items)
+            {
+                int tempWidth = TextRenderer.MeasureText(cb.GetItemText(item), cb.Font).Width + verticalScrollBarWidth;
+                if (tempWidth > maxWidth)
+                {
+                    maxWidth = tempWidth;
+                }
+            }
+            cb.DropDownWidth = maxWidth;
+        }
+
         public static void RefreshItem(this ListBox lb, int index)
         {
             typeof(ListBox).InvokeMember("RefreshItem", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod, null, lb, new object[] { index });
@@ -843,6 +858,11 @@ namespace ShareX.HelpersLib
         public static bool IsTransparent(this Color color)
         {
             return color.A < 255;
+        }
+
+        public static string ToStringProper(this Rectangle rect)
+        {
+            return $"X: {rect.X}, Y: {rect.Y}, Width: {rect.Width}, Height: {rect.Height}";
         }
     }
 }
